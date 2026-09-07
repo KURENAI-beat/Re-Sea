@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_414c45fe50a42e130c2dec0c339bd591 {
+                #map_54d45c604e97272791419e5ac9b66421 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -55,14 +55,14 @@
 <body>
     
     
-            <div class="folium-map" id="map_414c45fe50a42e130c2dec0c339bd591" ></div>
+            <div class="folium-map" id="map_54d45c604e97272791419e5ac9b66421" ></div>
         
 </body>
 <script>
     
     
-            var map_414c45fe50a42e130c2dec0c339bd591 = L.map(
-                "map_414c45fe50a42e130c2dec0c339bd591",
+            var map_54d45c604e97272791419e5ac9b66421 = L.map(
+                "map_54d45c604e97272791419e5ac9b66421",
                 {
                     center: [35.476551984126985, 133.29834563492062],
                     crs: L.CRS.EPSG3857,
@@ -79,7 +79,7 @@
 
         
     
-            var tile_layer_73b2f0c3a84238659cc83f11b49ad114 = L.tileLayer(
+            var tile_layer_0d152f49b7a66924422112ae29185008 = L.tileLayer(
                 "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {
   "minZoom": 0,
@@ -96,11 +96,11 @@
             );
         
     
-            tile_layer_73b2f0c3a84238659cc83f11b49ad114.addTo(map_414c45fe50a42e130c2dec0c339bd591);
+            tile_layer_0d152f49b7a66924422112ae29185008.addTo(map_54d45c604e97272791419e5ac9b66421);
         
     
-            var heat_map_f8eeb2268429eddac0ef270ee79211af = L.heatLayer(
-                [[35.476625, 133.29559444444445, 9], [35.476625, 133.29559444444445, 0], [35.476625, 133.29559444444445, 0], [35.476625, 133.29559444444445, 7], [35.456247222222224, 133.36184444444444, 13], [35.544752777777774, 133.22291666666666, 1], [35.42836388888889, 133.32128055555555, 11]],
+            var heat_map_608355061adc4c08eb6674018d0a7166 = L.heatLayer(
+                [[35.476625, 133.29559444444445, 53], [35.476625, 133.29559444444445, 2], [35.476625, 133.29559444444445, 36], [35.476625, 133.29559444444445, 43], [35.456247222222224, 133.36184444444444, 3], [35.544752777777774, 133.22291666666666, 58], [35.42836388888889, 133.32128055555555, 298]],
                 {
   "minOpacity": 0.5,
   "maxZoom": 18,
@@ -110,19 +110,19 @@
             );
         
     
-            heat_map_f8eeb2268429eddac0ef270ee79211af.addTo(map_414c45fe50a42e130c2dec0c339bd591);
+            heat_map_608355061adc4c08eb6674018d0a7166.addTo(map_54d45c604e97272791419e5ac9b66421);
         
     
-            var marker_51a6a751b6b5286b7091686bba027ee5 = L.marker(
+            var marker_7881f2cdf7a058e769b9208902b6e939 = L.marker(
                 [35.476625, 133.29559444444445],
                 {
 }
-            ).addTo(map_414c45fe50a42e130c2dec0c339bd591);
+            ).addTo(map_54d45c604e97272791419e5ac9b66421);
         
     
-            var icon_03258db1661b24a48751d5c7279d0703 = L.AwesomeMarkers.icon(
+            var icon_b7172ca46f749a76a1531f621bee1645 = L.AwesomeMarkers.icon(
                 {
-  "markerColor": "red",
+  "markerColor": "green",
   "iconColor": "white",
   "icon": "trash",
   "prefix": "glyphicon",
@@ -131,34 +131,34 @@
             );
         
     
-        var popup_6b813d7e7c01e84f35596f2f0a9fbadb = L.popup({
-  "maxWidth": 300,
+        var popup_4c96620794ae02140ac8aa327760042c = L.popup({
+  "maxWidth": 320,
 });
 
         
             
-                var html_dc60d3b7619992363e0cf4062f9abc2c = $(`<div id="html_dc60d3b7619992363e0cf4062f9abc2c" style="width: 100.0%; height: 100.0%;">         <b>撮影日時:</b> 2026/09/07 07:15:56<br>         <b>検出ゴミ数:</b> 9 個<br>         <b>座標:</b> 35.47662, 133.29559         </div>`)[0];
-                popup_6b813d7e7c01e84f35596f2f0a9fbadb.setContent(html_dc60d3b7619992363e0cf4062f9abc2c);
+                var html_22868cf485d63137ca515695d04fea57 = $(`<div id="html_22868cf485d63137ca515695d04fea57" style="width: 100.0%; height: 100.0%;">         <div style="font-family: sans-serif; min-width: 220px;">             <h4 style="margin: 0 0 5px 0; color: #1e88e5;">📍 漂着ゴミ調査ポイント</h4>             <div style="font-size: 11px; color: #666; margin-bottom: 8px;">撮影日時: 2026/09/07 07:15:56</div>             <div style="background: #e8f5e9; padding: 6px; border-radius: 4px; margin-bottom: 6px;">                 <b style="color: #2e7d32;">♻️ 資源プラ: 28 個</b><br>                 <small style="color: #388e3c;">採取可能原料: 約 <b>280g</b><br>                 レジンアクセ: <b>約 56 個分</b></small>             </div>             <div style="background: #ffebee; padding: 6px; border-radius: 4px; margin-bottom: 8px;">                 <b style="color: #c62828;">🗑️ 一般ゴミ: 25 個</b>             </div>             <details style="font-size: 12px; cursor: pointer;">                 <summary><b>📊 ゴミの詳細内訳（計 53 個）</b></summary>                 <div style="margin-top: 4px; padding-left: 5px; max-height: 120px; overflow-y: auto;">                     ・プラスチックブイ・浮子: <b>10</b> 個<br>・ペットボトル: <b>16</b> 個<br>・発泡スチロール破片: <b>8</b> 個<br>・硬質プラ・キャップ・破片: <b>12</b> 個<br>・空き缶・金属: <b>6</b> 個<br>・漁網・ロープ: <b>1</b> 個<br>                 </div>             </details>         </div>         </div>`)[0];
+                popup_4c96620794ae02140ac8aa327760042c.setContent(html_22868cf485d63137ca515695d04fea57);
             
         
 
-        marker_51a6a751b6b5286b7091686bba027ee5.bindPopup(popup_6b813d7e7c01e84f35596f2f0a9fbadb)
+        marker_7881f2cdf7a058e769b9208902b6e939.bindPopup(popup_4c96620794ae02140ac8aa327760042c)
         ;
 
         
     
     
-                marker_51a6a751b6b5286b7091686bba027ee5.setIcon(icon_03258db1661b24a48751d5c7279d0703);
+                marker_7881f2cdf7a058e769b9208902b6e939.setIcon(icon_b7172ca46f749a76a1531f621bee1645);
             
     
-            var marker_5079e1fd1c864546bf7a81575699c2e6 = L.marker(
+            var marker_34f85be83b7cdc0f8714cb09e1eb9fb4 = L.marker(
                 [35.476625, 133.29559444444445],
                 {
 }
-            ).addTo(map_414c45fe50a42e130c2dec0c339bd591);
+            ).addTo(map_54d45c604e97272791419e5ac9b66421);
         
     
-            var icon_c03835ef973b61080b82105ada4ca106 = L.AwesomeMarkers.icon(
+            var icon_77144138fad98138dbb0f29e0e1d29b4 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "blue",
   "iconColor": "white",
@@ -169,36 +169,36 @@
             );
         
     
-        var popup_d6085248fe80a278c2ef557a6f972913 = L.popup({
-  "maxWidth": 300,
+        var popup_57b64e95cc366b33ba5bd96351d5d45d = L.popup({
+  "maxWidth": 320,
 });
 
         
             
-                var html_0d4547fce705956ef14008c7a672a118 = $(`<div id="html_0d4547fce705956ef14008c7a672a118" style="width: 100.0%; height: 100.0%;">         <b>撮影日時:</b> 2026/09/07 07:16:06<br>         <b>検出ゴミ数:</b> 0 個<br>         <b>座標:</b> 35.47662, 133.29559         </div>`)[0];
-                popup_d6085248fe80a278c2ef557a6f972913.setContent(html_0d4547fce705956ef14008c7a672a118);
+                var html_c3361ffd9ba1923027ffe29d26885b3f = $(`<div id="html_c3361ffd9ba1923027ffe29d26885b3f" style="width: 100.0%; height: 100.0%;">         <div style="font-family: sans-serif; min-width: 220px;">             <h4 style="margin: 0 0 5px 0; color: #1e88e5;">📍 漂着ゴミ調査ポイント</h4>             <div style="font-size: 11px; color: #666; margin-bottom: 8px;">撮影日時: 2026/09/07 07:16:06</div>             <div style="background: #e8f5e9; padding: 6px; border-radius: 4px; margin-bottom: 6px;">                 <b style="color: #2e7d32;">♻️ 資源プラ: 1 個</b><br>                 <small style="color: #388e3c;">採取可能原料: 約 <b>10g</b><br>                 レジンアクセ: <b>約 2 個分</b></small>             </div>             <div style="background: #ffebee; padding: 6px; border-radius: 4px; margin-bottom: 8px;">                 <b style="color: #c62828;">🗑️ 一般ゴミ: 1 個</b>             </div>             <details style="font-size: 12px; cursor: pointer;">                 <summary><b>📊 ゴミの詳細内訳（計 2 個）</b></summary>                 <div style="margin-top: 4px; padding-left: 5px; max-height: 120px; overflow-y: auto;">                     ・硬質プラ・キャップ・破片: <b>1</b> 個<br>・発泡スチロール破片: <b>1</b> 個<br>                 </div>             </details>         </div>         </div>`)[0];
+                popup_57b64e95cc366b33ba5bd96351d5d45d.setContent(html_c3361ffd9ba1923027ffe29d26885b3f);
             
         
 
-        marker_5079e1fd1c864546bf7a81575699c2e6.bindPopup(popup_d6085248fe80a278c2ef557a6f972913)
+        marker_34f85be83b7cdc0f8714cb09e1eb9fb4.bindPopup(popup_57b64e95cc366b33ba5bd96351d5d45d)
         ;
 
         
     
     
-                marker_5079e1fd1c864546bf7a81575699c2e6.setIcon(icon_c03835ef973b61080b82105ada4ca106);
+                marker_34f85be83b7cdc0f8714cb09e1eb9fb4.setIcon(icon_77144138fad98138dbb0f29e0e1d29b4);
             
     
-            var marker_9831a73d7bd916215be4529f52dcec6f = L.marker(
+            var marker_8afecb28def4316a8e3a038465ebd7cc = L.marker(
                 [35.476625, 133.29559444444445],
                 {
 }
-            ).addTo(map_414c45fe50a42e130c2dec0c339bd591);
+            ).addTo(map_54d45c604e97272791419e5ac9b66421);
         
     
-            var icon_4791a3e5c98b49e1a3f68593aa3a18ec = L.AwesomeMarkers.icon(
+            var icon_7e25179c392ee3ed15661a20822436db = L.AwesomeMarkers.icon(
                 {
-  "markerColor": "blue",
+  "markerColor": "green",
   "iconColor": "white",
   "icon": "trash",
   "prefix": "glyphicon",
@@ -207,36 +207,36 @@
             );
         
     
-        var popup_d2355151d2eb3a3bac96caa77ca196d9 = L.popup({
-  "maxWidth": 300,
+        var popup_fcd13ac436e31fff91f1a9a2f3793ce0 = L.popup({
+  "maxWidth": 320,
 });
 
         
             
-                var html_1153a916739918dc354f14bca5bf96df = $(`<div id="html_1153a916739918dc354f14bca5bf96df" style="width: 100.0%; height: 100.0%;">         <b>撮影日時:</b> 2026/09/07 07:16:23<br>         <b>検出ゴミ数:</b> 0 個<br>         <b>座標:</b> 35.47662, 133.29559         </div>`)[0];
-                popup_d2355151d2eb3a3bac96caa77ca196d9.setContent(html_1153a916739918dc354f14bca5bf96df);
+                var html_de579ed06f99d1bce7971c392e9eda77 = $(`<div id="html_de579ed06f99d1bce7971c392e9eda77" style="width: 100.0%; height: 100.0%;">         <div style="font-family: sans-serif; min-width: 220px;">             <h4 style="margin: 0 0 5px 0; color: #1e88e5;">📍 漂着ゴミ調査ポイント</h4>             <div style="font-size: 11px; color: #666; margin-bottom: 8px;">撮影日時: 2026/09/07 07:16:23</div>             <div style="background: #e8f5e9; padding: 6px; border-radius: 4px; margin-bottom: 6px;">                 <b style="color: #2e7d32;">♻️ 資源プラ: 22 個</b><br>                 <small style="color: #388e3c;">採取可能原料: 約 <b>220g</b><br>                 レジンアクセ: <b>約 44 個分</b></small>             </div>             <div style="background: #ffebee; padding: 6px; border-radius: 4px; margin-bottom: 8px;">                 <b style="color: #c62828;">🗑️ 一般ゴミ: 14 個</b>             </div>             <details style="font-size: 12px; cursor: pointer;">                 <summary><b>📊 ゴミの詳細内訳（計 36 個）</b></summary>                 <div style="margin-top: 4px; padding-left: 5px; max-height: 120px; overflow-y: auto;">                     ・ペットボトル: <b>16</b> 個<br>・硬質プラ・キャップ・破片: <b>6</b> 個<br>・空き缶・金属: <b>3</b> 個<br>・発泡スチロール破片: <b>2</b> 個<br>・漁網・ロープ: <b>4</b> 個<br>・プラスチックブイ・浮子: <b>3</b> 個<br>・ビン・ガラス: <b>2</b> 個<br>                 </div>             </details>         </div>         </div>`)[0];
+                popup_fcd13ac436e31fff91f1a9a2f3793ce0.setContent(html_de579ed06f99d1bce7971c392e9eda77);
             
         
 
-        marker_9831a73d7bd916215be4529f52dcec6f.bindPopup(popup_d2355151d2eb3a3bac96caa77ca196d9)
+        marker_8afecb28def4316a8e3a038465ebd7cc.bindPopup(popup_fcd13ac436e31fff91f1a9a2f3793ce0)
         ;
 
         
     
     
-                marker_9831a73d7bd916215be4529f52dcec6f.setIcon(icon_4791a3e5c98b49e1a3f68593aa3a18ec);
+                marker_8afecb28def4316a8e3a038465ebd7cc.setIcon(icon_7e25179c392ee3ed15661a20822436db);
             
     
-            var marker_24cd7e174ffd54daa47485f5d23d59fa = L.marker(
+            var marker_9b937f2507b195a2298784030e12a133 = L.marker(
                 [35.476625, 133.29559444444445],
                 {
 }
-            ).addTo(map_414c45fe50a42e130c2dec0c339bd591);
+            ).addTo(map_54d45c604e97272791419e5ac9b66421);
         
     
-            var icon_f615225edd7d0737698b1ffa30cd69af = L.AwesomeMarkers.icon(
+            var icon_b6ed8a1a1aa1088531e205a73308b75b = L.AwesomeMarkers.icon(
                 {
-  "markerColor": "red",
+  "markerColor": "green",
   "iconColor": "white",
   "icon": "trash",
   "prefix": "glyphicon",
@@ -245,72 +245,34 @@
             );
         
     
-        var popup_ae1398c15002397e3115d076d6d23a5d = L.popup({
-  "maxWidth": 300,
+        var popup_44d0a17c03bef6019ff9eb9badc749d6 = L.popup({
+  "maxWidth": 320,
 });
 
         
             
-                var html_9dcea072a83480a5ebb766e363336147 = $(`<div id="html_9dcea072a83480a5ebb766e363336147" style="width: 100.0%; height: 100.0%;">         <b>撮影日時:</b> 2026/09/06 13:05:42<br>         <b>検出ゴミ数:</b> 7 個<br>         <b>座標:</b> 35.47662, 133.29559         </div>`)[0];
-                popup_ae1398c15002397e3115d076d6d23a5d.setContent(html_9dcea072a83480a5ebb766e363336147);
+                var html_83b7573532d13ecb733b2ed04ab9635a = $(`<div id="html_83b7573532d13ecb733b2ed04ab9635a" style="width: 100.0%; height: 100.0%;">         <div style="font-family: sans-serif; min-width: 220px;">             <h4 style="margin: 0 0 5px 0; color: #1e88e5;">📍 漂着ゴミ調査ポイント</h4>             <div style="font-size: 11px; color: #666; margin-bottom: 8px;">撮影日時: 2026/09/06 13:05:42</div>             <div style="background: #e8f5e9; padding: 6px; border-radius: 4px; margin-bottom: 6px;">                 <b style="color: #2e7d32;">♻️ 資源プラ: 25 個</b><br>                 <small style="color: #388e3c;">採取可能原料: 約 <b>250g</b><br>                 レジンアクセ: <b>約 50 個分</b></small>             </div>             <div style="background: #ffebee; padding: 6px; border-radius: 4px; margin-bottom: 8px;">                 <b style="color: #c62828;">🗑️ 一般ゴミ: 18 個</b>             </div>             <details style="font-size: 12px; cursor: pointer;">                 <summary><b>📊 ゴミの詳細内訳（計 43 個）</b></summary>                 <div style="margin-top: 4px; padding-left: 5px; max-height: 120px; overflow-y: auto;">                     ・プラスチックブイ・浮子: <b>7</b> 個<br>・ペットボトル: <b>13</b> 個<br>・硬質プラ・キャップ・破片: <b>12</b> 個<br>・発泡スチロール破片: <b>3</b> 個<br>・空き缶・金属: <b>4</b> 個<br>・漁網・ロープ: <b>2</b> 個<br>・ビン・ガラス: <b>2</b> 個<br>                 </div>             </details>         </div>         </div>`)[0];
+                popup_44d0a17c03bef6019ff9eb9badc749d6.setContent(html_83b7573532d13ecb733b2ed04ab9635a);
             
         
 
-        marker_24cd7e174ffd54daa47485f5d23d59fa.bindPopup(popup_ae1398c15002397e3115d076d6d23a5d)
+        marker_9b937f2507b195a2298784030e12a133.bindPopup(popup_44d0a17c03bef6019ff9eb9badc749d6)
         ;
 
         
     
     
-                marker_24cd7e174ffd54daa47485f5d23d59fa.setIcon(icon_f615225edd7d0737698b1ffa30cd69af);
+                marker_9b937f2507b195a2298784030e12a133.setIcon(icon_b6ed8a1a1aa1088531e205a73308b75b);
             
     
-            var marker_946d431dd4078903b0fc3f9b21e387d6 = L.marker(
+            var marker_4f5e858a12f68d92a4530b8e9b2f59df = L.marker(
                 [35.456247222222224, 133.36184444444444],
                 {
 }
-            ).addTo(map_414c45fe50a42e130c2dec0c339bd591);
+            ).addTo(map_54d45c604e97272791419e5ac9b66421);
         
     
-            var icon_122ce1f956af203dad7091ed4afed31c = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "red",
-  "iconColor": "white",
-  "icon": "trash",
-  "prefix": "glyphicon",
-  "extraClasses": "fa-rotate-0",
-}
-            );
-        
-    
-        var popup_75f943423975046e0f916f07427a374b = L.popup({
-  "maxWidth": 300,
-});
-
-        
-            
-                var html_40ea1c7948d8e96161c3f5a8ff5d0453 = $(`<div id="html_40ea1c7948d8e96161c3f5a8ff5d0453" style="width: 100.0%; height: 100.0%;">         <b>撮影日時:</b> 2026/09/07 07:33:30<br>         <b>検出ゴミ数:</b> 13 個<br>         <b>座標:</b> 35.45625, 133.36184         </div>`)[0];
-                popup_75f943423975046e0f916f07427a374b.setContent(html_40ea1c7948d8e96161c3f5a8ff5d0453);
-            
-        
-
-        marker_946d431dd4078903b0fc3f9b21e387d6.bindPopup(popup_75f943423975046e0f916f07427a374b)
-        ;
-
-        
-    
-    
-                marker_946d431dd4078903b0fc3f9b21e387d6.setIcon(icon_122ce1f956af203dad7091ed4afed31c);
-            
-    
-            var marker_df61b2f8522ff2c9618f5716d2966c53 = L.marker(
-                [35.544752777777774, 133.22291666666666],
-                {
-}
-            ).addTo(map_414c45fe50a42e130c2dec0c339bd591);
-        
-    
-            var icon_01c47a4ccaafd41dcf9471723164bae0 = L.AwesomeMarkers.icon(
+            var icon_a949ddfb2198430dfcd82e8777741db5 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "blue",
   "iconColor": "white",
@@ -321,36 +283,36 @@
             );
         
     
-        var popup_f70019337a0dfa5a28c07a4ba8ac3b1a = L.popup({
-  "maxWidth": 300,
+        var popup_f30991f9f4cee223769f621f9caf1c20 = L.popup({
+  "maxWidth": 320,
 });
 
         
             
-                var html_0c74c9d0cd0980ce91575a4042b52f4b = $(`<div id="html_0c74c9d0cd0980ce91575a4042b52f4b" style="width: 100.0%; height: 100.0%;">         <b>撮影日時:</b> 2026/09/07 07:33:41<br>         <b>検出ゴミ数:</b> 1 個<br>         <b>座標:</b> 35.54475, 133.22292         </div>`)[0];
-                popup_f70019337a0dfa5a28c07a4ba8ac3b1a.setContent(html_0c74c9d0cd0980ce91575a4042b52f4b);
+                var html_9f5f41e8abc66578df5c2312ebc93e5b = $(`<div id="html_9f5f41e8abc66578df5c2312ebc93e5b" style="width: 100.0%; height: 100.0%;">         <div style="font-family: sans-serif; min-width: 220px;">             <h4 style="margin: 0 0 5px 0; color: #1e88e5;">📍 漂着ゴミ調査ポイント</h4>             <div style="font-size: 11px; color: #666; margin-bottom: 8px;">撮影日時: 2026/09/07 07:33:30</div>             <div style="background: #e8f5e9; padding: 6px; border-radius: 4px; margin-bottom: 6px;">                 <b style="color: #2e7d32;">♻️ 資源プラ: 2 個</b><br>                 <small style="color: #388e3c;">採取可能原料: 約 <b>20g</b><br>                 レジンアクセ: <b>約 4 個分</b></small>             </div>             <div style="background: #ffebee; padding: 6px; border-radius: 4px; margin-bottom: 8px;">                 <b style="color: #c62828;">🗑️ 一般ゴミ: 1 個</b>             </div>             <details style="font-size: 12px; cursor: pointer;">                 <summary><b>📊 ゴミの詳細内訳（計 3 個）</b></summary>                 <div style="margin-top: 4px; padding-left: 5px; max-height: 120px; overflow-y: auto;">                     ・ペットボトル: <b>1</b> 個<br>・空き缶・金属: <b>1</b> 個<br>・硬質プラ・キャップ・破片: <b>1</b> 個<br>                 </div>             </details>         </div>         </div>`)[0];
+                popup_f30991f9f4cee223769f621f9caf1c20.setContent(html_9f5f41e8abc66578df5c2312ebc93e5b);
             
         
 
-        marker_df61b2f8522ff2c9618f5716d2966c53.bindPopup(popup_f70019337a0dfa5a28c07a4ba8ac3b1a)
+        marker_4f5e858a12f68d92a4530b8e9b2f59df.bindPopup(popup_f30991f9f4cee223769f621f9caf1c20)
         ;
 
         
     
     
-                marker_df61b2f8522ff2c9618f5716d2966c53.setIcon(icon_01c47a4ccaafd41dcf9471723164bae0);
+                marker_4f5e858a12f68d92a4530b8e9b2f59df.setIcon(icon_a949ddfb2198430dfcd82e8777741db5);
             
     
-            var marker_526e411b6d8ed08f0022d22c22bee630 = L.marker(
-                [35.42836388888889, 133.32128055555555],
+            var marker_1620d1776e352941f8f2dc3b91e432b4 = L.marker(
+                [35.544752777777774, 133.22291666666666],
                 {
 }
-            ).addTo(map_414c45fe50a42e130c2dec0c339bd591);
+            ).addTo(map_54d45c604e97272791419e5ac9b66421);
         
     
-            var icon_01ca74fe25382915f50c3e45f4c61fcf = L.AwesomeMarkers.icon(
+            var icon_ea4b9be2fcff6594d2736b1508b67972 = L.AwesomeMarkers.icon(
                 {
-  "markerColor": "red",
+  "markerColor": "green",
   "iconColor": "white",
   "icon": "trash",
   "prefix": "glyphicon",
@@ -359,24 +321,62 @@
             );
         
     
-        var popup_f9612d571849e3509c6793e5b4bc626c = L.popup({
-  "maxWidth": 300,
+        var popup_3020970aec6d31183fe2feeaf8f185ed = L.popup({
+  "maxWidth": 320,
 });
 
         
             
-                var html_e2d55cdeb331a1e64e4bc5f71ad274fd = $(`<div id="html_e2d55cdeb331a1e64e4bc5f71ad274fd" style="width: 100.0%; height: 100.0%;">         <b>撮影日時:</b> 2026/09/07 07:33:53<br>         <b>検出ゴミ数:</b> 11 個<br>         <b>座標:</b> 35.42836, 133.32128         </div>`)[0];
-                popup_f9612d571849e3509c6793e5b4bc626c.setContent(html_e2d55cdeb331a1e64e4bc5f71ad274fd);
+                var html_27fda10fda8285531f95b6c000bab5f8 = $(`<div id="html_27fda10fda8285531f95b6c000bab5f8" style="width: 100.0%; height: 100.0%;">         <div style="font-family: sans-serif; min-width: 220px;">             <h4 style="margin: 0 0 5px 0; color: #1e88e5;">📍 漂着ゴミ調査ポイント</h4>             <div style="font-size: 11px; color: #666; margin-bottom: 8px;">撮影日時: 2026/09/07 07:33:41</div>             <div style="background: #e8f5e9; padding: 6px; border-radius: 4px; margin-bottom: 6px;">                 <b style="color: #2e7d32;">♻️ 資源プラ: 35 個</b><br>                 <small style="color: #388e3c;">採取可能原料: 約 <b>350g</b><br>                 レジンアクセ: <b>約 70 個分</b></small>             </div>             <div style="background: #ffebee; padding: 6px; border-radius: 4px; margin-bottom: 8px;">                 <b style="color: #c62828;">🗑️ 一般ゴミ: 23 個</b>             </div>             <details style="font-size: 12px; cursor: pointer;">                 <summary><b>📊 ゴミの詳細内訳（計 58 個）</b></summary>                 <div style="margin-top: 4px; padding-left: 5px; max-height: 120px; overflow-y: auto;">                     ・プラスチックブイ・浮子: <b>18</b> 個<br>・硬質プラ・キャップ・破片: <b>11</b> 個<br>・ペットボトル: <b>24</b> 個<br>・発泡スチロール破片: <b>5</b> 個<br>                 </div>             </details>         </div>         </div>`)[0];
+                popup_3020970aec6d31183fe2feeaf8f185ed.setContent(html_27fda10fda8285531f95b6c000bab5f8);
             
         
 
-        marker_526e411b6d8ed08f0022d22c22bee630.bindPopup(popup_f9612d571849e3509c6793e5b4bc626c)
+        marker_1620d1776e352941f8f2dc3b91e432b4.bindPopup(popup_3020970aec6d31183fe2feeaf8f185ed)
         ;
 
         
     
     
-                marker_526e411b6d8ed08f0022d22c22bee630.setIcon(icon_01ca74fe25382915f50c3e45f4c61fcf);
+                marker_1620d1776e352941f8f2dc3b91e432b4.setIcon(icon_ea4b9be2fcff6594d2736b1508b67972);
+            
+    
+            var marker_09f0ff6404314ec66c3fa2c2776bcc3f = L.marker(
+                [35.42836388888889, 133.32128055555555],
+                {
+}
+            ).addTo(map_54d45c604e97272791419e5ac9b66421);
+        
+    
+            var icon_aecf1b2ed721a35828663260e65b473c = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "trash",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_3b40673bcf97ccf50ef143eb765edac4 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_b2a349178007362f7e37610cb17f73b1 = $(`<div id="html_b2a349178007362f7e37610cb17f73b1" style="width: 100.0%; height: 100.0%;">         <div style="font-family: sans-serif; min-width: 220px;">             <h4 style="margin: 0 0 5px 0; color: #1e88e5;">📍 漂着ゴミ調査ポイント</h4>             <div style="font-size: 11px; color: #666; margin-bottom: 8px;">撮影日時: 2026/09/07 07:33:53</div>             <div style="background: #e8f5e9; padding: 6px; border-radius: 4px; margin-bottom: 6px;">                 <b style="color: #2e7d32;">♻️ 資源プラ: 78 個</b><br>                 <small style="color: #388e3c;">採取可能原料: 約 <b>780g</b><br>                 レジンアクセ: <b>約 156 個分</b></small>             </div>             <div style="background: #ffebee; padding: 6px; border-radius: 4px; margin-bottom: 8px;">                 <b style="color: #c62828;">🗑️ 一般ゴミ: 220 個</b>             </div>             <details style="font-size: 12px; cursor: pointer;">                 <summary><b>📊 ゴミの詳細内訳（計 298 個）</b></summary>                 <div style="margin-top: 4px; padding-left: 5px; max-height: 120px; overflow-y: auto;">                     ・プラスチックブイ・浮子: <b>216</b> 個<br>・ペットボトル: <b>67</b> 個<br>・硬質プラ・キャップ・破片: <b>11</b> 個<br>・空き缶・金属: <b>1</b> 個<br>・発泡スチロール破片: <b>2</b> 個<br>・ビン・ガラス: <b>1</b> 個<br>                 </div>             </details>         </div>         </div>`)[0];
+                popup_3b40673bcf97ccf50ef143eb765edac4.setContent(html_b2a349178007362f7e37610cb17f73b1);
+            
+        
+
+        marker_09f0ff6404314ec66c3fa2c2776bcc3f.bindPopup(popup_3b40673bcf97ccf50ef143eb765edac4)
+        ;
+
+        
+    
+    
+                marker_09f0ff6404314ec66c3fa2c2776bcc3f.setIcon(icon_aecf1b2ed721a35828663260e65b473c);
             
 </script>
 </html>
