@@ -53,7 +53,7 @@ def get_exif_data(image_path):
 
 def main():
     # 学習済み専用モデルがあれば使用、なければベースモデルを使用
-    model_path = "best.pt" if os.path.exists("best.pt") else "yolov8n.pt"
+    model_path = "first.pt" if os.path.exists("first.pt") else "yolov8n.pt"
     print(f"使用モデル: {model_path}")
     model = YOLO(model_path)
 
@@ -76,11 +76,11 @@ def main():
             print(f"GPS情報なし（スキップ）: {img_path}")
             continue
 
-        # 物体検出（高解像度推論1280px、閾値0.15で微小・変形ゴミを捕捉）
+        # 物体検出（高解像度推論1280px、閾値0.40で微小・変形ゴミを捕捉）
         results = model(
             img_path,
             imgsz=1280,
-            conf=0.10,
+            conf=0.40,
             iou=0.65,
             max_det=1000,
             verbose=False,
@@ -89,7 +89,7 @@ def main():
         
         # 検出ゴミ総数のカウント（専用モデルの場合は全検出ボックス、初期モデルの場合は関連クラス集計）
         if boxes is not None:
-            if model_path == "best.pt":
+            if model_path == "first.pt":
                 trash_count = len(boxes)
             else:
                 # 初期モデル(COCO)用: 39:bottle, 41:cup, 45:bowl, 29:frisbee
