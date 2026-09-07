@@ -1,5 +1,6 @@
 .venv/
 .DS_Store
 images/
+output_detected/
 old/
 second/
