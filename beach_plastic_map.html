@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_09903c2840ce341df898c10f5f0ee114 {
+                #map_b4bdb50feb4cb53de484298822aefc5f {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -55,16 +55,16 @@
 <body>
     
     
-            <div class="folium-map" id="map_09903c2840ce341df898c10f5f0ee114" ></div>
+            <div class="folium-map" id="map_b4bdb50feb4cb53de484298822aefc5f" ></div>
         
 </body>
 <script>
     
     
-            var map_09903c2840ce341df898c10f5f0ee114 = L.map(
-                "map_09903c2840ce341df898c10f5f0ee114",
+            var map_b4bdb50feb4cb53de484298822aefc5f = L.map(
+                "map_b4bdb50feb4cb53de484298822aefc5f",
                 {
-                    center: [35.49894722222222, 133.2646777777778],
+                    center: [35.476454629629636, 133.30201388888887],
                     crs: L.CRS.EPSG3857,
                     ...{
   "zoom": 14,
@@ -79,7 +79,7 @@
 
         
     
-            var tile_layer_816eaaed5778af558a2f54ff965fd2e0 = L.tileLayer(
+            var tile_layer_3b70e93cf419d406936fca79071ca7ef = L.tileLayer(
                 "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {
   "minZoom": 0,
@@ -96,11 +96,11 @@
             );
         
     
-            tile_layer_816eaaed5778af558a2f54ff965fd2e0.addTo(map_09903c2840ce341df898c10f5f0ee114);
+            tile_layer_3b70e93cf419d406936fca79071ca7ef.addTo(map_b4bdb50feb4cb53de484298822aefc5f);
         
     
-            var heat_map_c2904070851643bab807d29660d0c93a = L.heatLayer(
-                [[35.49894722222222, 133.2646777777778, 0]],
+            var heat_map_e4e4315b7b0817e6c46d5daa62b41c09 = L.heatLayer(
+                [[35.456247222222224, 133.36184444444444, 20], [35.544752777777774, 133.22291666666666, 9], [35.42836388888889, 133.32128055555555, 55]],
                 {
   "minOpacity": 0.5,
   "maxZoom": 18,
@@ -110,19 +110,19 @@
             );
         
     
-            heat_map_c2904070851643bab807d29660d0c93a.addTo(map_09903c2840ce341df898c10f5f0ee114);
+            heat_map_e4e4315b7b0817e6c46d5daa62b41c09.addTo(map_b4bdb50feb4cb53de484298822aefc5f);
         
     
-            var marker_7a424323c1cffd0153c832d69c7c4796 = L.marker(
-                [35.49894722222222, 133.2646777777778],
+            var marker_f47cf543311297f788871635e8716b54 = L.marker(
+                [35.456247222222224, 133.36184444444444],
                 {
 }
-            ).addTo(map_09903c2840ce341df898c10f5f0ee114);
+            ).addTo(map_b4bdb50feb4cb53de484298822aefc5f);
         
     
-            var icon_f9d215ac02394a20dac281b43f116d0a = L.AwesomeMarkers.icon(
+            var icon_1049b7f757af2ccf301333e66c15cacc = L.AwesomeMarkers.icon(
                 {
-  "markerColor": "blue",
+  "markerColor": "red",
   "iconColor": "white",
   "icon": "trash",
   "prefix": "glyphicon",
@@ -131,24 +131,100 @@
             );
         
     
-        var popup_294b5fea2354e7c1d16a93dbc96043c5 = L.popup({
+        var popup_ec85eea0762cae731a73c57b01fdaee2 = L.popup({
   "maxWidth": 300,
 });
 
         
             
-                var html_2dd95b4f75bd2a7f41fdc4b6f721c0df = $(`<div id="html_2dd95b4f75bd2a7f41fdc4b6f721c0df" style="width: 100.0%; height: 100.0%;">         <b>撮影日時:</b> 2026:09:01 13:58:54<br>         <b>検出ボトル数:</b> 0 本<br>         <b>座標:</b> 35.49895, 133.26468         </div>`)[0];
-                popup_294b5fea2354e7c1d16a93dbc96043c5.setContent(html_2dd95b4f75bd2a7f41fdc4b6f721c0df);
+                var html_f8fa20bd749688b74a678110a387b27e = $(`<div id="html_f8fa20bd749688b74a678110a387b27e" style="width: 100.0%; height: 100.0%;">         <b>撮影日時:</b> 2026/09/07 07:33:30<br>         <b>検出ゴミ数:</b> 20 個<br>         <b>座標:</b> 35.45625, 133.36184         </div>`)[0];
+                popup_ec85eea0762cae731a73c57b01fdaee2.setContent(html_f8fa20bd749688b74a678110a387b27e);
             
         
 
-        marker_7a424323c1cffd0153c832d69c7c4796.bindPopup(popup_294b5fea2354e7c1d16a93dbc96043c5)
+        marker_f47cf543311297f788871635e8716b54.bindPopup(popup_ec85eea0762cae731a73c57b01fdaee2)
         ;
 
         
     
     
-                marker_7a424323c1cffd0153c832d69c7c4796.setIcon(icon_f9d215ac02394a20dac281b43f116d0a);
+                marker_f47cf543311297f788871635e8716b54.setIcon(icon_1049b7f757af2ccf301333e66c15cacc);
+            
+    
+            var marker_83fa33a440852350f4dd499cbab0b1ba = L.marker(
+                [35.544752777777774, 133.22291666666666],
+                {
+}
+            ).addTo(map_b4bdb50feb4cb53de484298822aefc5f);
+        
+    
+            var icon_88fb27bd2978b6908af344f421574fc8 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "trash",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_0b354a1301e09bbb8907726158c5c558 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_e8e1352535aeb90420abf1b54a1056ed = $(`<div id="html_e8e1352535aeb90420abf1b54a1056ed" style="width: 100.0%; height: 100.0%;">         <b>撮影日時:</b> 2026/09/07 07:33:41<br>         <b>検出ゴミ数:</b> 9 個<br>         <b>座標:</b> 35.54475, 133.22292         </div>`)[0];
+                popup_0b354a1301e09bbb8907726158c5c558.setContent(html_e8e1352535aeb90420abf1b54a1056ed);
+            
+        
+
+        marker_83fa33a440852350f4dd499cbab0b1ba.bindPopup(popup_0b354a1301e09bbb8907726158c5c558)
+        ;
+
+        
+    
+    
+                marker_83fa33a440852350f4dd499cbab0b1ba.setIcon(icon_88fb27bd2978b6908af344f421574fc8);
+            
+    
+            var marker_d4f60c8d2056f38e10e11a8efeff9ae8 = L.marker(
+                [35.42836388888889, 133.32128055555555],
+                {
+}
+            ).addTo(map_b4bdb50feb4cb53de484298822aefc5f);
+        
+    
+            var icon_79f2a9695aaf272f06e1688fb8dfb78d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "trash",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_7ddb97b38d7d2e578f5b335037f0d47c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_3696b8ce7677cf2231da1cc563ef812b = $(`<div id="html_3696b8ce7677cf2231da1cc563ef812b" style="width: 100.0%; height: 100.0%;">         <b>撮影日時:</b> 2026/09/07 07:33:53<br>         <b>検出ゴミ数:</b> 55 個<br>         <b>座標:</b> 35.42836, 133.32128         </div>`)[0];
+                popup_7ddb97b38d7d2e578f5b335037f0d47c.setContent(html_3696b8ce7677cf2231da1cc563ef812b);
+            
+        
+
+        marker_d4f60c8d2056f38e10e11a8efeff9ae8.bindPopup(popup_7ddb97b38d7d2e578f5b335037f0d47c)
+        ;
+
+        
+    
+    
+                marker_d4f60c8d2056f38e10e11a8efeff9ae8.setIcon(icon_79f2a9695aaf272f06e1688fb8dfb78d);
             
 </script>
 </html>

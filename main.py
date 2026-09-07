@@ -77,7 +77,14 @@ def main():
             continue
 
         # 物体検出（高解像度推論1280px、閾値0.15で微小・変形ゴミを捕捉）
-        results = model(img_path, imgsz=1280, conf=0.15, verbose=False)
+        results = model(
+            img_path,
+            imgsz=1280,
+            conf=0.10,
+            iou=0.65,
+            max_det=1000,
+            verbose=False,
+        )        
         boxes = results[0].boxes
         
         # 検出ゴミ総数のカウント（専用モデルの場合は全検出ボックス、初期モデルの場合は関連クラス集計）
@@ -127,8 +134,7 @@ def main():
         ).add_to(m)
 
     m.save("beach_plastic_map.html")
-    print("
-マップ出力完了: beach_plastic_map.html")
+    print("マップ出力完了: beach_plastic_map.html")
 
 
 if __name__ == "__main__":
