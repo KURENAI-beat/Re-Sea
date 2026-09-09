@@ -2,5 +2,10 @@
 .DS_Store
 images/
 output_detected/
+output_detected_seg/
 old/
 second/
+resea-beach-seg/
+runs/
+yolov8n*.pt
+yolo26n.pt

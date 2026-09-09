@@ -1,4 +1,3 @@
-cat << 'EOF' > /Volumes/SSD/Re-Sea/main_seg.py
 import glob
 import os
 import cv2
@@ -106,12 +105,12 @@ def get_exif_data(image_path):
 
             if "GPSLatitude" in gps_info and "GPSLongitude" in gps_info:
                 lat_dms = gps_info["GPSLatitude"]
-                lat = float(lat_dms[0]) + float(lat_dms) / 60.0 + float(lat_dms) / 3600.0
+                lat = float(lat_dms[0]) + float(lat_dms[1]) / 60.0 + float(lat_dms[2]) / 3600.0
                 if gps_info.get("GPSLatitudeRef") == "S":
                     lat = -lat
 
                 lon_dms = gps_info["GPSLongitude"]
-                lon = float(lon_dms[0]) + float(lon_dms) / 60.0 + float(lon_dms) / 3600.0
+                lon = float(lon_dms[0]) + float(lon_dms[1]) / 60.0 + float(lon_dms[2]) / 3600.0
                 if gps_info.get("GPSLongitudeRef") == "W":
                     lon = -lon
 
@@ -119,7 +118,7 @@ def get_exif_data(image_path):
                     date_str = str(gps_info["GPSDateStamp"]).replace(":", "/")
                     if "GPSTimeStamp" in gps_info:
                         t = gps_info["GPSTimeStamp"]
-                        datetime_taken = f"{date_str} {int(t[0]):02d}:{int(t):02d}:{int(t):02d}"
+                        datetime_taken = f"{date_str} {int(t[0]):02d}:{int(t[1]):02d}:{int(t[2]):02d}"
                     else:
                         datetime_taken = date_str
 
@@ -130,7 +129,7 @@ def get_exif_data(image_path):
 
 
 # -------------------------------------------------------------
-# 2. 高精度 重複除去＆包含関係フィルタ（多重検出を強力に防止）
+# 2. 高精度 重複除去＆包含関係フィルタ
 # -------------------------------------------------------------
 def filter_overlapping_and_contained_boxes(boxes, scores, classes, polygons, iou_thresh=0.25, contain_thresh=0.40):
     if len(boxes) == 0:
@@ -155,18 +154,18 @@ def filter_overlapping_and_contained_boxes(boxes, scores, classes, polygons, iou
             continue
         final_indices.append(i)
         box_a = sorted_boxes[i]
-        area_a = (box_a - box_a[0]) * (box_a - box_a)
+        area_a = (box_a[2] - box_a[0]) * (box_a[3] - box_a[1])
 
         for j in range(i + 1, n):
             if suppressed[j]:
                 continue
             box_b = sorted_boxes[j]
-            area_b = (box_b - box_b[0]) * (box_b - box_b)
+            area_b = (box_b[2] - box_b[0]) * (box_b[3] - box_b[1])
 
             inter_x1 = max(box_a[0], box_b[0])
-            inter_y1 = max(box_a, box_b)
-            inter_x2 = min(box_a, box_b)
-            inter_y2 = min(box_a, box_b)
+            inter_y1 = max(box_a[1], box_b[1])
+            inter_x2 = min(box_a[2], box_b[2])
+            inter_y2 = min(box_a[3], box_b[3])
 
             inter_w = max(0, inter_x2 - inter_x1)
             inter_h = max(0, inter_y2 - inter_y1)
@@ -209,25 +208,23 @@ def predict_with_slicing_seg(model, img_cv2, slice_size=1280, overlap_ratio=0.2,
                 continue
 
             xyxy = b.xyxy[0].cpu().numpy()
-            bw = xyxy - xyxy[0]
-            bh = xyxy - xyxy
+            bw = xyxy[2] - xyxy[0]
+            bh = xyxy[3] - xyxy[1]
             box_area = bw * bh
 
-            # 1. パッチ面積の30%以上を占める巨大マスク（壁・砂浜・空の誤検出）を破棄
             if box_area > (patch_area * 0.30):
                 continue
             if box_area > (img_total_area * 0.10):
                 continue
 
-            # 2. 極端に細長い線状のノイズ（松葉、小枝等）を除外
             aspect_ratio = max(bw, bh) / max(1, min(bw, bh))
             if aspect_ratio > 10.0 and box_area < 2500:
                 continue
 
             x1 = xyxy[0] + offset_x
-            y1 = xyxy + offset_y
-            x2 = xyxy + offset_x
-            y2 = xyxy + offset_y
+            y1 = xyxy[1] + offset_y
+            x2 = xyxy[2] + offset_x
+            y2 = xyxy[3] + offset_y
 
             all_boxes.append([x1, y1, x2, y2])
             all_scores.append(score)
@@ -237,7 +234,7 @@ def predict_with_slicing_seg(model, img_cv2, slice_size=1280, overlap_ratio=0.2,
                 poly = res.masks.xy[idx].copy()
                 if len(poly) >= 3:
                     poly[:, 0] += offset_x
-                    poly += offset_y
+                    poly[:, 1] += offset_y
                     all_polygons.append(poly)
                 else:
                     all_polygons.append(None)
@@ -317,7 +314,7 @@ def draw_segmentation_results(img_cv2, det_result, save_path, alpha=0.45):
             if len(polygon) >= 3:
                 poly_clipped = polygon.copy()
                 poly_clipped[:, 0] = np.clip(poly_clipped[:, 0], 0, w - 1)
-                poly_clipped = np.clip(poly_clipped, 0, h - 1)
+                poly_clipped[:, 1] = np.clip(poly_clipped[:, 1], 0, h - 1)
                 pts = np.int32([poly_clipped])
 
                 cv2.fillPoly(overlay, pts, color)
@@ -343,7 +340,56 @@ def draw_segmentation_results(img_cv2, det_result, save_path, alpha=0.45):
 
 
 # -------------------------------------------------------------
-# 5. メイン処理
+# 5. 地図（Folium）の生成関数
+# -------------------------------------------------------------
+def generate_folium_map(data_points, heat_data):
+    """収集されたデータポイントからFoliumマップを生成して保存"""
+    if not data_points:
+        return
+
+    avg_lat = sum(p["lat"] for p in data_points) / len(data_points)
+    avg_lon = sum(p["lon"] for p in data_points) / len(data_points)
+    m = folium.Map(location=[avg_lat, avg_lon], zoom_start=14)
+
+    HeatMap(heat_data, radius=25, blur=15).add_to(m)
+
+    for p in data_points:
+        breakdown_items = "".join([f"・{k}: <b>{v}</b> 個<br>" for k, v in p["breakdown"].items()])
+        popup_html = f"""
+        <div style="font-family: sans-serif; min-width: 220px;">
+            <h4 style="margin: 0 0 5px 0; color: #1e88e5;">📍 漂着ゴミ調査ポイント（多角形解析）</h4>
+            <div style="font-size: 11px; color: #666; margin-bottom: 8px;">撮影日時: {p['datetime']}</div>
+            <div style="background: #e8f5e9; padding: 6px; border-radius: 4px; margin-bottom: 6px;">
+                <b style="color: #2e7d32;">♻️ 資源プラ: {p['upcyclable']} 個</b><br>
+                <small style="color: #388e3c;">採取可能原料: 約 <b>{p['grams']}g</b><br>
+                レジンアクセ: <b>約 {p['accessories']} 個分</b></small>
+            </div>
+            <div style="background: #ffebee; padding: 6px; border-radius: 4px; margin-bottom: 8px;">
+                <b style="color: #c62828;">🗑️ 一般ゴミ: {p['other']} 個</b>
+            </div>
+            <details style="font-size: 12px; cursor: pointer;">
+                <summary><b>📊 ゴミの詳細内訳（計 {p['total']} 個）</b></summary>
+                <div style="margin-top: 4px; padding-left: 5px; max-height: 120px; overflow-y: auto;">
+                    {breakdown_items}
+                </div>
+            </details>
+        </div>
+        """
+        marker_color = "green" if p["upcyclable"] >= 10 else ("red" if p["total"] >= 15 else "blue")
+        folium.Marker(
+            location=[p["lat"], p["lon"]],
+            popup=folium.Popup(popup_html, max_width=320),
+            icon=folium.Icon(color=marker_color, icon="trash")
+        ).add_to(m)
+
+    # 2つのファイル名（多角形用・本番用）両方に自動保存！
+    for target_path in ["beach_plastic_map_seg.html", "beach_plastic_map.html"]:
+        m.save(target_path)
+    print(f"🗺️ 地図を更新保存しました（現在ピン数: {len(data_points)} 箇所）: beach_plastic_map_seg.html / beach_plastic_map.html")
+
+
+# -------------------------------------------------------------
+# 6. メイン処理
 # -------------------------------------------------------------
 def main():
     candidate_models = [
@@ -377,100 +423,70 @@ def main():
     data_points = []
     heat_data = []
 
-    print(f"{len(image_files)} 枚の画像を解析中（多角形SAHIタイリング推論・高精度重複除去適用）...")
+    print(f"{len(image_files)} 枚の画像を解析中（多角形SAHIタイリング推論・逐次地図更新）...")
 
-    for img_path in image_files:
-        meta = get_exif_data(img_path)
-        if not meta:
-            print(f"GPS情報なし（スキップ）: {img_path}")
-            continue
+    try:
+        for idx, img_path in enumerate(image_files, 1):
+            meta = get_exif_data(img_path)
+            if not meta:
+                print(f"GPS情報なし（スキップ）: {img_path}")
+                continue
 
-        img_cv2 = cv2.imread(img_path)
-        if img_cv2 is None:
-            continue
+            img_cv2 = cv2.imread(img_path)
+            if img_cv2 is None:
+                continue
 
-        det_result = predict_with_slicing_seg(model, img_cv2, slice_size=1280, overlap_ratio=0.2, conf=0.45, iou_thresh=0.25)
+            det_result = predict_with_slicing_seg(model, img_cv2, slice_size=1280, overlap_ratio=0.2, conf=0.45, iou_thresh=0.25)
 
-        save_path = os.path.join(output_folder, os.path.basename(img_path))
-        draw_segmentation_results(img_cv2, det_result, save_path)
+            save_path = os.path.join(output_folder, os.path.basename(img_path))
+            draw_segmentation_results(img_cv2, det_result, save_path)
 
-        upcyclable_count = 0
-        other_count = 0
-        class_counts = {}
+            upcyclable_count = 0
+            other_count = 0
+            class_counts = {}
 
-        if det_result is not None:
-            for cls_id in det_result["classes"]:
-                raw_name = det_result["names"].get(cls_id, str(cls_id)).lower()
-                ja_name = CLASS_NAME_JA.get(raw_name, raw_name)
-                class_counts[ja_name] = class_counts.get(ja_name, 0) + 1
-                if is_upcyclable(raw_name):
-                    upcyclable_count += 1
-                else:
-                    other_count += 1
+            if det_result is not None:
+                for cls_id in det_result["classes"]:
+                    raw_name = det_result["names"].get(cls_id, str(cls_id)).lower()
+                    ja_name = CLASS_NAME_JA.get(raw_name, raw_name)
+                    class_counts[ja_name] = class_counts.get(ja_name, 0) + 1
+                    if is_upcyclable(raw_name):
+                        upcyclable_count += 1
+                    else:
+                        other_count += 1
 
-        total_trash = upcyclable_count + other_count
-        estimated_grams = upcyclable_count * 10
-        estimated_accessories = max(1, round(estimated_grams / 5)) if upcyclable_count > 0 else 0
+            total_trash = upcyclable_count + other_count
+            estimated_grams = upcyclable_count * 10
+            estimated_accessories = max(1, round(estimated_grams / 5)) if upcyclable_count > 0 else 0
 
-        data_points.append({
-            "path": img_path,
-            "lat": meta["lat"],
-            "lon": meta["lon"],
-            "datetime": meta["datetime"],
-            "total": total_trash,
-            "upcyclable": upcyclable_count,
-            "other": other_count,
-            "grams": estimated_grams,
-            "accessories": estimated_accessories,
-            "breakdown": class_counts
-        })
-        heat_data.append([meta["lat"], meta["lon"], total_trash])
-        print(f"完了: {os.path.basename(img_path)} -> ゴミ総数: {total_trash}個 (資源プラ: {upcyclable_count}個 / アクセ約{estimated_accessories}個分)")
+            data_points.append({
+                "path": img_path,
+                "lat": meta["lat"],
+                "lon": meta["lon"],
+                "datetime": meta["datetime"],
+                "total": total_trash,
+                "upcyclable": upcyclable_count,
+                "other": other_count,
+                "grams": estimated_grams,
+                "accessories": estimated_accessories,
+                "breakdown": class_counts
+            })
+            heat_data.append([meta["lat"], meta["lon"], total_trash])
+            print(f"[{idx}/{len(image_files)}] 完了: {os.path.basename(img_path)} -> ゴミ総数: {total_trash}個 (資源プラ: {upcyclable_count}個 / アクセ約{estimated_accessories}個分)")
 
-    if not data_points:
-        print("位置情報付きの画像データがありませんでした。")
-        return
+            # 5枚ごとに地図をリアルタイム自動保存（途中で中断してもそれまでのピンが確実に地図に残る！）
+            if len(data_points) % 5 == 0:
+                generate_folium_map(data_points, heat_data)
 
-    avg_lat = sum(p["lat"] for p in data_points) / len(data_points)
-    avg_lon = sum(p["lon"] for p in data_points) / len(data_points)
-    m = folium.Map(location=[avg_lat, avg_lon], zoom_start=14)
+    except KeyboardInterrupt:
+        print("\nユーザーによる中断を検知しました。そこまでの結果で地図を保存します...")
 
-    HeatMap(heat_data, radius=25, blur=15).add_to(m)
-
-    for p in data_points:
-        breakdown_items = "".join([f"・{k}: <b>{v}</b> 個<br>" for k, v in p["breakdown"].items()])
-        popup_html = f"""
-        <div style="font-family: sans-serif; min-width: 220px;">
-            <h4 style="margin: 0 0 5px 0; color: #1e88e5;">📍 漂着ゴミ調査ポイント（多角形SAHI解析）</h4>
-            <div style="font-size: 11px; color: #666; margin-bottom: 8px;">撮影日時: {p['datetime']}</div>
-            <div style="background: #e8f5e9; padding: 6px; border-radius: 4px; margin-bottom: 6px;">
-                <b style="color: #2e7d32;">♻️ 資源プラ: {p['upcyclable']} 個</b><br>
-                <small style="color: #388e3c;">採取可能原料: 約 <b>{p['grams']}g</b><br>
-                レジンアクセ: <b>約 {p['accessories']} 個分</b></small>
-            </div>
-            <div style="background: #ffebee; padding: 6px; border-radius: 4px; margin-bottom: 8px;">
-                <b style="color: #c62828;">🗑️ 一般ゴミ: {p['other']} 個</b>
-            </div>
-            <details style="font-size: 12px; cursor: pointer;">
-                <summary><b>📊 ゴミの詳細内訳（計 {p['total']} 個）</b></summary>
-                <div style="margin-top: 4px; padding-left: 5px; max-height: 120px; overflow-y: auto;">
-                    {breakdown_items}
-                </div>
-            </details>
-        </div>
-        """
-        marker_color = "green" if p["upcyclable"] >= 10 else ("red" if p["total"] >= 15 else "blue")
-        folium.Marker(
-            location=[p["lat"], p["lon"]],
-            popup=folium.Popup(popup_html, max_width=320),
-            icon=folium.Icon(color=marker_color, icon="trash")
-        ).add_to(m)
-
-    map_path = "beach_plastic_map_seg.html"
-    m.save(map_path)
-    print(f"マップ出力完了: {map_path}")
+    finally:
+        # 最終保存
+        if data_points:
+            generate_folium_map(data_points, heat_data)
+            print("\n🎉 全ての解析結果を地図に保存しました！")
 
 
 if __name__ == "__main__":
     main()
-EOF
