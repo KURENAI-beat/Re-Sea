@@ -9,19 +9,22 @@ import torch
 from torchvision.ops import nms
 from ultralytics import YOLO
 
+# -------------------------------------------------------------
 # 1. クラス定義・表示名マッピング
-# レジンアクセサリーの原料に活用できる資源プラスチック
+# -------------------------------------------------------------
+# レジンアクセサリーの原料に活用できる資源プラスチック（うなぎの筒返しも硬質プラ原料として活用）
 UPCYCLABLE_CLASSES = {
-    "plastic_bottle", "plastic_etc", "bottle", "cup", "bowl", "frisbee"
+    "plastic_bottle", "plastic_etc", "bottle", "cup", "bowl", "frisbee", "eel_trap"
 }
 
-# 資源プラ混入を防ぐ強制ゴミキーワード（ブイ・発泡スチロール・漁網・金属等）
+# 資源プラ混入を防ぐ強制ゴミキーワード（ブイ・発泡スチロール・漁網・金属・袋・木材・衣類・靴等）
 FORCE_TRASH_KEYWORDS = [
-    "buoy", "styrofoam", "net", "metal", "glass", "bag", "paper", "cardboard", "cigarette"
+    "buoy", "styrofoam", "net", "metal", "glass", "bag", "paper",
+    "cardboard", "carboard", "cigarette", "wood", "driftwood", "clothes", "shoe"
 ]
 
 def is_upcyclable(raw_name: str) -> bool:
-    """資源プラスチック（レジン原料）として適格か判定（ブイや発泡スチロールは厳格に除外）"""
+    """資源プラスチック（レジン原料）として適格か判定（ブイや発泡スチロール・木材等は厳格に除外）"""
     name = raw_name.lower().strip()
     if any(keyword in name for keyword in FORCE_TRASH_KEYWORDS):
         return False
@@ -35,12 +38,20 @@ CLASS_NAME_EN = {
     "styrofoam_box": "Styrofoam_Box",
     "styrofoam_piece": "Styrofoam_Piece",
     "net": "Net",
+    "trash_net": "Net",
     "metal": "Metal",
     "metal_can": "Metal_Can",
     "glass": "Glass",
     "paper_cardboard": "Cardboard",
+    "paper_carboard": "Cardboard",
     "plastic_bag": "Plastic_Bag",
+    "bag": "Bag",
     "cigarette_butt": "Cigarette_Butt",
+    "eel_trap": "Eel_Trap",
+    "driftwood": "Driftwood",
+    "wood": "Wood",
+    "clothes": "Clothes",
+    "shoe": "Shoe",
     "bottle": "Bottle",
     "cup": "Cup",
     "bowl": "Bowl",
@@ -56,12 +67,20 @@ CLASS_NAME_JA = {
     "styrofoam_box": "発泡スチロール箱",
     "styrofoam_piece": "発泡スチロール破片",
     "net": "漁網・ロープ",
+    "trash_net": "漁網・ロープ",
     "metal": "空き缶・金属",
     "metal_can": "空き缶",
     "glass": "ビン・ガラス",
     "paper_cardboard": "紙・ダンボール",
+    "paper_carboard": "紙・ダンボール",
     "plastic_bag": "ビニール袋",
+    "bag": "ビニール袋",
     "cigarette_butt": "吸い殻",
+    "eel_trap": "うなぎの筒返し",
+    "driftwood": "流木・木片",
+    "wood": "流木・木材",
+    "clothes": "衣類・布",
+    "shoe": "靴・サンダル",
     "bottle": "ボトル",
     "cup": "カップ",
     "bowl": "ボウル",
@@ -100,7 +119,6 @@ def get_exif_data(image_path):
                 if gps_info.get("GPSLongitudeRef") == "W":
                     lon = -lon
 
-                # iPhone写真等で通常Exifに日時がない場合、GPSタイムスタンプから補完
                 if datetime_taken == "不明" and "GPSDateStamp" in gps_info:
                     date_str = str(gps_info["GPSDateStamp"]).replace(":", "/")
                     if "GPSTimeStamp" in gps_info:
@@ -115,8 +133,10 @@ def get_exif_data(image_path):
     return None
 
 
+# -------------------------------------------------------------
 # 2. SAHI（スライシング・タイリング推論）
-def predict_with_slicing(model, img_cv2, slice_size=1280, overlap_ratio=0.2, conf=0.10, iou_thresh=0.60):
+# -------------------------------------------------------------
+def predict_with_slicing(model, img_cv2, slice_size=1280, overlap_ratio=0.2, conf=0.40, iou_thresh=0.45):
     h, w, _ = img_cv2.shape
     if w <= slice_size and h <= slice_size:
         results = model(img_cv2, imgsz=slice_size, conf=conf, iou=iou_thresh, verbose=False)
@@ -177,7 +197,9 @@ def predict_with_slicing(model, img_cv2, slice_size=1280, overlap_ratio=0.2, con
     }
 
 
-# 3. 資源プラ(緑枠: RECYCLE) vs 一般ゴミ(赤枠: TRASH) の色分け描画（完全英語表記で文字化け解消）
+# -------------------------------------------------------------
+# 3. 資源プラ(緑枠: RECYCLE) vs 一般ゴミ(赤枠: TRASH) の色分け描画
+# -------------------------------------------------------------
 def draw_custom_boxes(img_cv2, det_result, save_path):
     if det_result is None or len(det_result["boxes"]) == 0:
         cv2.imwrite(save_path, img_cv2)
@@ -207,80 +229,11 @@ def draw_custom_boxes(img_cv2, det_result, save_path):
     cv2.imwrite(save_path, img_out)
 
 
-# 4. メイン処理
-def main():
-    # 利用可能なモデルを優先度順に探索
-    for candidate in ["second.pt", "first.pt", "yolo26n.pt", "yolov8n.pt"]:
-        if os.path.exists(candidate):
-            model_path = candidate
-            break
-    print(f"使用モデル: {model_path}")
-    model = YOLO(model_path)
-
-    image_folder = "images"
-    output_folder = "output_detected"
-    os.makedirs(output_folder, exist_ok=True)
-
-    image_files = []
-    for ext in ("*.jpg", "*.jpeg", "*.png", "*.JPG", "*.JPEG", "*.PNG"):
-        image_files.extend(glob.glob(os.path.join(image_folder, ext)))
-    image_files = sorted(list(set(image_files)))
-    data_points = []
-    heat_data = []
-
-    print(f"{len(image_files)} 枚の画像を解析中（SAHIタイリング推論）...")
-
-    for img_path in image_files:
-        meta = get_exif_data(img_path)
-        if not meta:
-            print(f"GPS情報なし（スキップ）: {img_path}")
-            continue
-
-        img_cv2 = cv2.imread(img_path)
-        if img_cv2 is None:
-            continue
-
-        det_result = predict_with_slicing(model, img_cv2, slice_size=1280, overlap_ratio=0.2, conf=0.10, iou_thresh=0.60)
-        
-        save_path = os.path.join(output_folder, os.path.basename(img_path))
-        draw_custom_boxes(img_cv2, det_result, save_path)
-
-        upcyclable_count = 0
-        other_count = 0
-        class_counts = {}
-
-        if det_result is not None:
-            for cls_id in det_result["classes"]:
-                raw_name = det_result["names"].get(cls_id, str(cls_id)).lower()
-                ja_name = CLASS_NAME_JA.get(raw_name, raw_name)
-                class_counts[ja_name] = class_counts.get(ja_name, 0) + 1
-                if is_upcyclable(raw_name):
-                    upcyclable_count += 1
-                else:
-                    other_count += 1
-
-        total_trash = upcyclable_count + other_count
-        # 資源原料（約10g/個）および作成可能アクセ数（原料5g/個換算）
-        estimated_grams = upcyclable_count * 10
-        estimated_accessories = max(1, round(estimated_grams / 5)) if upcyclable_count > 0 else 0
-
-        data_points.append({
-            "path": img_path,
-            "lat": meta["lat"],
-            "lon": meta["lon"],
-            "datetime": meta["datetime"],
-            "total": total_trash,
-            "upcyclable": upcyclable_count,
-            "other": other_count,
-            "grams": estimated_grams,
-            "accessories": estimated_accessories,
-            "breakdown": class_counts
-        })
-        heat_data.append([meta["lat"], meta["lon"], total_trash])
-        print(f"完了: {os.path.basename(img_path)} -> ゴミ総数: {total_trash}個 (資源プラ: {upcyclable_count}個 / アクセ約{estimated_accessories}個分)")
-
+# -------------------------------------------------------------
+# 4. 地図（Folium）の生成関数
+# -------------------------------------------------------------
+def generate_folium_map(data_points, heat_data):
     if not data_points:
-        print("位置情報付きの画像データがありませんでした。")
         return
 
     avg_lat = sum(p["lat"] for p in data_points) / len(data_points)
@@ -311,7 +264,6 @@ def main():
             </details>
         </div>
         """
-        # 資源が10個以上あれば緑、ゴミ全体が多いなら赤、通常は青
         marker_color = "green" if p["upcyclable"] >= 10 else ("red" if p["total"] >= 15 else "blue")
         folium.Marker(
             location=[p["lat"], p["lon"]],
@@ -320,7 +272,101 @@ def main():
         ).add_to(m)
 
     m.save("beach_plastic_map.html")
-    print("マップ出力完了: beach_plastic_map.html")
+    print(f"🗺️ 地図を更新保存しました（現在ピン数: {len(data_points)} 箇所）: beach_plastic_map.html")
+
+
+# -------------------------------------------------------------
+# 5. メイン処理
+# -------------------------------------------------------------
+def main():
+    # 利用可能なモデルを優先度順に探索
+    for candidate in [
+        "v2_sea_trash_buoy_box.pt",
+        "second.pt",
+        "v1_general_trash_box.pt",
+        "first.pt",
+        "yolo26n.pt",
+        "yolov8n.pt",
+    ]:
+        if os.path.exists(candidate):
+            model_path = candidate
+            break
+    print(f"使用モデル: {model_path}")
+    model = YOLO(model_path)
+
+    image_folder = "images"
+    output_folder = "output_detected"
+    os.makedirs(output_folder, exist_ok=True)
+
+    image_files = []
+    for ext in ("*.jpg", "*.jpeg", "*.png", "*.JPG", "*.JPEG", "*.PNG"):
+        image_files.extend(glob.glob(os.path.join(image_folder, ext)))
+    image_files = sorted(list(set(image_files)))
+    data_points = []
+    heat_data = []
+
+    print(f"{len(image_files)} 枚の画像を解析中（四角形SAHIタイリング推論・本番運用）...")
+
+    try:
+        for idx, img_path in enumerate(image_files, 1):
+            meta = get_exif_data(img_path)
+            if not meta:
+                print(f"GPS情報なし（スキップ）: {img_path}")
+                continue
+
+            img_cv2 = cv2.imread(img_path)
+            if img_cv2 is None:
+                continue
+
+            det_result = predict_with_slicing(model, img_cv2, slice_size=1280, overlap_ratio=0.2, conf=0.40, iou_thresh=0.45)
+            
+            save_path = os.path.join(output_folder, os.path.basename(img_path))
+            draw_custom_boxes(img_cv2, det_result, save_path)
+
+            upcyclable_count = 0
+            other_count = 0
+            class_counts = {}
+
+            if det_result is not None:
+                for cls_id in det_result["classes"]:
+                    raw_name = det_result["names"].get(cls_id, str(cls_id)).lower()
+                    ja_name = CLASS_NAME_JA.get(raw_name, raw_name)
+                    class_counts[ja_name] = class_counts.get(ja_name, 0) + 1
+                    if is_upcyclable(raw_name):
+                        upcyclable_count += 1
+                    else:
+                        other_count += 1
+
+            total_trash = upcyclable_count + other_count
+            estimated_grams = upcyclable_count * 10
+            estimated_accessories = max(1, round(estimated_grams / 5)) if upcyclable_count > 0 else 0
+
+            data_points.append({
+                "path": img_path,
+                "lat": meta["lat"],
+                "lon": meta["lon"],
+                "datetime": meta["datetime"],
+                "total": total_trash,
+                "upcyclable": upcyclable_count,
+                "other": other_count,
+                "grams": estimated_grams,
+                "accessories": estimated_accessories,
+                "breakdown": class_counts
+            })
+            heat_data.append([meta["lat"], meta["lon"], total_trash])
+            print(f"[{idx}/{len(image_files)}] 完了: {os.path.basename(img_path)} -> ゴミ総数: {total_trash}個 (資源プラ: {upcyclable_count}個 / アクセ約{estimated_accessories}個分)")
+
+            # 5枚ごとに地図を自動保存
+            if len(data_points) % 5 == 0:
+                generate_folium_map(data_points, heat_data)
+
+    except KeyboardInterrupt:
+        print("\nユーザーによる中断を検知しました。そこまでの結果で地図を保存します...")
+
+    finally:
+        if data_points:
+            generate_folium_map(data_points, heat_data)
+            print("\n🎉 全ての解析結果を本番地図に保存完了: beach_plastic_map.html")
 
 
 if __name__ == "__main__":
